@@ -1,0 +1,132 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* LexBénin institutional palette */
+  --color-navy: var(--navy);
+  --color-navy-foreground: var(--navy-foreground);
+  --color-ai: var(--ai);
+  --color-ai-foreground: var(--ai-foreground);
+  --color-meta: var(--meta);
+  --color-amber: var(--amber);
+  --color-amber-foreground: var(--amber-foreground);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, 'Times New Roman', serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  color-scheme: light;
+  --radius: 0.625rem;
+
+  /* Page surfaces (light) */
+  --background: #fafaf8;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+
+  /* Primary brand blue */
+  --primary: #185fa5;
+  --primary-foreground: #f4f9ff;
+
+  --secondary: #eef3f8;
+  --secondary-foreground: #0c2a4a;
+  --muted: #f1f0ec;
+  --muted-foreground: #5b6472;
+  --accent: #eef3f8;
+  --accent-foreground: #0c2a4a;
+
+  --destructive: #b3261e;
+  --destructive-foreground: #ffffff;
+
+  --border: #e4e2db;
+  --input: #d8dce2;
+  --ring: #185fa5;
+
+  /* Dark institutional surfaces */
+  --navy: #0c2a4a;
+  --navy-foreground: #e6f1fb;
+  --ai: #134876;
+  --ai-foreground: #e6f1fb;
+  --meta: #85b7eb;
+  --amber: #c98a3e;
+  --amber-foreground: #1a1205;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+}
+
+/* Rich text rendering for AI markdown-ish content */
+.prose-ai p {
+  margin-bottom: 0.75rem;
+}
+.prose-ai p:last-child {
+  margin-bottom: 0;
+}
+.prose-ai ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.prose-ai strong {
+  font-weight: 600;
+}
+
+/* Bande défilante infinie (ticker) -- pure CSS pour rester fluide à 60fps */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 26s linear infinite;
+}
+
+/* Texture de grain subtile, superposée en mix-blend-mode pour de la profondeur
+   sans dépendre d'une image externe */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
