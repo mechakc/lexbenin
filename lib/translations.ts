@@ -396,9 +396,10 @@ export const translations: Record<Lang, Translations> = {
       emptyTitle: 'Bienvenue sur LexBénin',
       emptyText:
         'Posez une question sur le droit béninois. Les réponses citent toujours les articles de loi utilisés.',
-      suggestion1: "Ai-je le droit d'accéder librement à internet ?",
-      suggestion2: 'Comment mes données personnelles sont-elles protégées ?',
+      suggestion1: "Une entreprise peut-elle collecter les données personnelles de ses clients sans leur consentement ?",
+      suggestion2: 'Quels sont les droits d\'une personne concernant la protection de ses données personnelles au Bénin ?',
       suggestion3: 'Une signature électronique a-t-elle une valeur légale ?',
+      suggestion4: 'Un site web béninois est victime d\'une fuite de données personnelles. Quelles sont les obligations légales de l\'entreprise ?',
       sources: 'Sources citées',
       article: 'Article',
       viewSource: 'Voir le texte officiel',

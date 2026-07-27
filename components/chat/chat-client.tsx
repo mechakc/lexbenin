@@ -125,6 +125,7 @@ export function ChatClient() {
     t.chat.suggestion1,
     t.chat.suggestion2,
     t.chat.suggestion3,
+    t.chat.suggestion4,
   ]
 
   const showBanner = !user && !bannerDismissed
