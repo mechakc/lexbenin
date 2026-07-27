@@ -132,6 +132,7 @@ interface ChatTranslations {
   suggestion1: string
   suggestion2: string
   suggestion3: string
+  suggestion4: string
   sources: string
   article: string
   viewSource: string
@@ -646,9 +647,10 @@ export const translations: Record<Lang, Translations> = {
       emptyTitle: 'Welcome to LexBénin',
       emptyText:
         'Ask a question about Beninese law. Answers always cite the articles of law used.',
-      suggestion1: 'Do I have the right to freely access the internet?',
-      suggestion2: 'How is my personal data protected?',
-      suggestion3: 'Does an electronic signature have legal value?',
+        suggestion1: "Can a company collect its customers' personal data without their consent?",
+        suggestion2: "What rights does an individual have regarding the protection of their personal data in Benin?",
+        suggestion3: "Does an electronic signature have legal validity?",
+        suggestion4: "A Beninese website has suffered a personal data breach. What are the company's legal obligations?",
       sources: 'Cited sources',
       article: 'Article',
       viewSource: 'View official text',
