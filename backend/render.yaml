@@ -1,0 +1,26 @@
+databases:
+  - name: lexbenin-db
+    plan: free
+    databaseName: lexbenin
+    user: lexbenin
+
+services:
+  - type: web
+    name: lexbenin-api
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lexbenin-db
+          property: connectionString
+      - key: EMBEDDING_BACKEND
+        value: mistral
+      - key: LLM_BACKEND
+        value: mistral
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: AUTH_SECRET_KEY
+        generateValue: true

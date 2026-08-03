@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+chromadb
+scikit-learn
+requests
+sqlalchemy
+bcrypt
+pyjwt
+pydantic[email]
+psycopg2-binary
+rank_bm25
