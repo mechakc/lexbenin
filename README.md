@@ -33,9 +33,10 @@ Le pipeline RAG suit toujours le même chemin pour chaque question :
 
 ```
 lexbridge/
-├── src/                      # Frontend React
+├── app/                      # Frontend React
 │   ├── components/
 │   ├── pages/
+│   ├── chat/
 │   └── ...
 ├── public/
 ├── backend/                  # Backend FastAPI (voir backend/README ou section ci-dessous)
@@ -162,11 +163,3 @@ Si tu utilises le backend d'embeddings `e5` en production, note que `multilingua
 - Génération de courriers/documents juridiques
 - Autres domaines de droit
 - Volet B2B (formation juridique gamifiée par poste/métier, dashboard de conformité) — piste de durabilité post-hackathon, non développée techniquement
-
-## Licence
-
-[TODO]
-
-## Contribuer
-
-[TODO — instructions de contribution si le repo devient collaboratif]
