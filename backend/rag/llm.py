@@ -107,23 +107,43 @@ class MistralGenerator(BaseGenerator):
             raise RuntimeError("MISTRAL_API_KEY non définie dans l'environnement.")
         self.model = model
 
-    def generate(self, system_prompt: str, user_message: str) -> str:
+    def generate(self, system_prompt: str, user_message: str, max_retries: int = 5) -> str:
+        # Même gestion du rate-limit que MistralEmbedder._call_api (voir
+        # rag/embeddings.py) : le tier gratuit renvoie facilement des 429, et
+        # sans retry l'utilisateur récupère une 500 brute. On respecte
+        # Retry-After si fourni, sinon backoff exponentiel (2s, 4s, 8s...).
+        import time
         import requests
-        response = requests.post(
-            "https://api.mistral.ai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {self.api_key}"},
-            json={
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_message},
-                ],
-                "temperature": 0.2,  # faible température : on veut de la précision, pas de la créativité
-            },
-            timeout=30,
+
+        for attempt in range(max_retries):
+            response = requests.post(
+                "https://api.mistral.ai/v1/chat/completions",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json={
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_message},
+                    ],
+                    "temperature": 0.2,  # faible température : on veut de la précision, pas de la créativité
+                },
+                timeout=30,
+            )
+
+            if response.status_code == 429:
+                retry_after = response.headers.get("Retry-After")
+                wait = float(retry_after) if retry_after else (2 ** (attempt + 1))
+                print(f"[MistralGenerator] Rate limit atteint (tentative {attempt + 1}/{max_retries}), "
+                      f"attente {wait:.1f}s avant nouvel essai...")
+                time.sleep(wait)
+                continue
+
+            response.raise_for_status()
+            return response.json()["choices"][0]["message"]["content"]
+
+        raise RuntimeError(
+            f"[MistralGenerator] Échec après {max_retries} tentatives (rate limit persistant)."
         )
-        response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"]
 
 
 class MockGenerator(BaseGenerator):
