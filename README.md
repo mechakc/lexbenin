@@ -1,12 +1,12 @@
-# LexBridge
+# LexBénin
 
 Un assistant juridique multi-pays qui répond aux questions des citoyens en langage simple, en citant systématiquement les articles de loi exacts sur lesquels il s'appuie — et en refusant de répondre plutôt que d'inventer, dès qu'une question sort de son périmètre indexé.
 
-> ⚠️ **Ceci n'est pas un conseil juridique professionnel.** LexBridge vulgarise et cite la loi ; pour toute situation complexe ou litigieuse, consultez un professionnel du droit.
+> ⚠️ **Ceci n'est pas un conseil juridique professionnel.** LexBénin vulgarise et cite la loi ; pour toute situation complexe ou litigieuse, consultez un professionnel du droit.
 
 ## Pourquoi ce projet
 
-Beaucoup de citoyens n'ont pas facilement accès à une explication fiable et vulgarisée de leurs droits, ce qui les rend vulnérables à la désinformation juridique ("on m'a dit que...", rumeurs, fausses infos en ligne). LexBridge ne se contente pas de répondre : il apprend à distinguer une information juridique fiable d'une rumeur, via la citation systématique des sources et la transparence sur l'incertitude.
+Beaucoup de citoyens n'ont pas facilement accès à une explication fiable et vulgarisée de leurs droits, ce qui les rend vulnérables à la désinformation juridique ("on m'a dit que...", rumeurs, fausses infos en ligne). LexBénin ne se contente pas de répondre : il apprend à distinguer une information juridique fiable d'une rumeur, via la citation systématique des sources et la transparence sur l'incertitude.
 
 **Périmètre actuel :**
 
@@ -32,7 +32,7 @@ Le pipeline RAG suit toujours le même chemin pour chaque question :
 ## Structure du repo
 
 ```
-lexbridge/
+lexbenin/
 ├── app/                      # Frontend React
 │   ├── components/
 │   ├── pages/
@@ -88,7 +88,7 @@ LLM_BACKEND=mistral            # "mock" (test, aucun appel réseau) | "mistral" 
 DISTANCE_THRESHOLD=            # à calibrer via rag/calibrate_threshold.py — voir plus bas
 VERIFY_ANSWERS=false           # true = double passage LLM pour vérifier chaque citation
 AUTH_SECRET_KEY=une_valeur_aleatoire_et_secrete   # jamais la valeur par défaut en prod
-DATABASE_URL=sqlite:///./lexbridge.db             # ou une URL Postgres en prod
+DATABASE_URL=sqlite:///./lexbenin.db             # ou une URL Postgres en prod
 ```
 
 Place tes données de loi dans `backend/data/<pays>/articles_<pays>.json`, sous la forme d'une liste d'articles avec ce schéma :
@@ -119,6 +119,9 @@ L'index RAG est construit une seule fois au démarrage (voir `lifespan` dans `ap
 ```bash
 # Test rapide en local, sans clé API (backend TF-IDF)
 python3 -m rag.test_cli
+
+# Tests unitaires (fonctions pures + garde-fou hors-périmètre, 100 % local)
+python3 -m pytest
 
 # Calibrer distance_threshold sur ton vrai backend d'embeddings (nécessite MISTRAL_API_KEY)
 python3 -m rag.calibrate_threshold
@@ -153,7 +156,7 @@ Stack pensée pour un hébergement gratuit/accessible :
 - **Frontend** : Vercel
 - **Backend** : Render / Railway / Hugging Face Spaces
 
-⚠️ En développement, le CORS du backend autorise toutes les origines (`allow_origins=["*"]`) — à restreindre à l'URL du frontend déployé avant mise en production. De même, `AUTH_SECRET_KEY` a une valeur par défaut de développement dans `app/auth.py` : à écraser obligatoirement via variable d'environnement en prod.
+⚠️ En développement, le CORS du backend autorise toutes les origines par défaut. En production, définis `ALLOWED_ORIGINS` (liste d'URL séparées par des virgules, ex. `https://lexbenin.vercel.app`) pour le restreindre à l'URL du frontend déployé — sans éditer le code. De même, `AUTH_SECRET_KEY` a une valeur par défaut de développement dans `app/auth.py` : à écraser obligatoirement via variable d'environnement en prod.
 
 Si tu utilises le backend d'embeddings `e5` en production, note que `multilingual-e5-large` charge ~2,2 Go en mémoire — au-delà des tiers gratuits de la plupart des hébergeurs. Le backend `mistral` (appels API légers, rien chargé en local) est recommandé pour un déploiement à mémoire limitée.
 
