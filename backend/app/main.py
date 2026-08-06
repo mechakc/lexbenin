@@ -81,10 +81,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="LexBénin API", lifespan=lifespan)
 
-# En dev, on autorise tout ; à restreindre à l'URL du frontend déployé en prod
+# Origines autorisées, configurables via ALLOWED_ORIGINS (liste séparée par des
+# virgules). Défaut "*" pour ne pas gêner le dev local ; en prod, définir
+# ALLOWED_ORIGINS=https://mon-frontend.example pour restreindre sans éditer le code.
+_allowed_origins_raw = os.environ.get("ALLOWED_ORIGINS", "*")
+allowed_origins = [o.strip() for o in _allowed_origins_raw.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
